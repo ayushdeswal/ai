@@ -1,0 +1,262 @@
+/*-------------------------------------------------
+1. FAMILY TREE
+-------------------------------------------------*/
+
+male(john).
+male(paul).
+male(mike).
+
+female(mary).
+female(lisa).
+female(anna).
+
+parent(john, paul).
+parent(mary, paul).
+parent(john, lisa).
+parent(mary, lisa).
+parent(paul, mike).
+parent(anna, mike).
+
+father(X,Y) :- male(X), parent(X,Y).
+mother(X,Y) :- female(X), parent(X,Y).
+
+brother(X,Y) :-
+    male(X),
+    parent(Z,X),
+    parent(Z,Y),
+    X \= Y.
+
+sister(X,Y) :-
+    female(X),
+    parent(Z,X),
+    parent(Z,Y),
+    X \= Y.
+
+grandparent(X,Y) :-
+    parent(X,Z),
+    parent(Z,Y).
+
+/* Example Query:
+?- father(john, paul).
+?- brother(paul, lisa).
+?- grandparent(john, mike).
+*/
+
+
+/*-------------------------------------------------
+2. CONCATENATE TWO LISTS
+-------------------------------------------------*/
+
+conc([], L, L).
+conc([H|T], L2, [H|L3]) :-
+    conc(T, L2, L3).
+
+/* Example:
+?- conc([1,2],[3,4],X).
+*/
+
+
+/*-------------------------------------------------
+3. REVERSE A LIST
+-------------------------------------------------*/
+
+reverse([], []).
+reverse([H|T], R) :-
+    reverse(T, RT),
+    conc(RT, [H], R).
+
+/* Example:
+?- reverse([1,2,3], X).
+*/
+
+
+/*-------------------------------------------------
+4. SUM OF TWO NUMBERS
+-------------------------------------------------*/
+
+sum(X, Y, Z) :-
+    Z is X + Y.
+
+/* Example:
+?- sum(5,3,X).
+*/
+
+
+/*-------------------------------------------------
+5. MAXIMUM OF TWO NUMBERS
+-------------------------------------------------*/
+
+max(X, Y, X) :- X >= Y.
+max(X, Y, Y) :- Y > X.
+
+/* Example:
+?- max(10,20,M).
+*/
+
+
+/*-------------------------------------------------
+6. FACTORIAL
+-------------------------------------------------*/
+
+factorial(0,1).
+
+factorial(N,F) :-
+    N > 0,
+    N1 is N - 1,
+    factorial(N1,F1),
+    F is N * F1.
+
+/* Example:
+?- factorial(5,F).
+*/
+
+
+/*-------------------------------------------------
+7. FIBONACCI SERIES
+-------------------------------------------------*/
+
+generate_fib(0,0).
+generate_fib(1,1).
+
+generate_fib(N,T) :-
+    N > 1,
+    N1 is N - 1,
+    N2 is N - 2,
+    generate_fib(N1,T1),
+    generate_fib(N2,T2),
+    T is T1 + T2.
+
+/* Example:
+?- generate_fib(6,T).
+*/
+
+
+/*-------------------------------------------------
+8. POWER OF A NUMBER
+-------------------------------------------------*/
+
+power(_,0,1).
+
+power(Num,Pow,Ans) :-
+    Pow > 0,
+    P1 is Pow - 1,
+    power(Num,P1,A1),
+    Ans is Num * A1.
+
+/* Example:
+?- power(2,3,X).
+*/
+
+
+/*-------------------------------------------------
+9. MULTIPLICATION OF TWO NUMBERS
+-------------------------------------------------*/
+
+multi(N1,N2,R) :-
+    R is N1 * N2.
+
+/* Example:
+?- multi(4,5,R).
+*/
+
+
+/*-------------------------------------------------
+10. MEMBER OF A LIST
+-------------------------------------------------*/
+
+memb(X,[X|_]).
+
+memb(X,[_|T]) :-
+    memb(X,T).
+
+/* Example:
+?- memb(3,[1,2,3,4]).
+*/
+
+
+/*-------------------------------------------------
+11. SUM OF LIST
+-------------------------------------------------*/
+
+sumlist([],0).
+
+sumlist([H|T],S) :-
+    sumlist(T,S1),
+    S is H + S1.
+
+/* Example:
+?- sumlist([1,2,3,4],S).
+*/
+
+
+/*-------------------------------------------------
+12. EVEN LENGTH & ODD LENGTH
+-------------------------------------------------*/
+
+evenlength([]).
+
+evenlength([_,_|T]) :-
+    evenlength(T).
+
+oddlength([_]).
+
+oddlength([_,_|T]) :-
+    oddlength(T).
+
+/* Example:
+?- evenlength([1,2,3,4]).
+?- oddlength([1,2,3]).
+*/
+
+
+/*-------------------------------------------------
+13. MAXIMUM ELEMENT IN A LIST
+-------------------------------------------------*/
+
+maxlist([X],X).
+
+maxlist([H|T],M) :-
+    maxlist(T,M1),
+    H >= M1,
+    M = H.
+
+maxlist([H|T],M) :-
+    maxlist(T,M1),
+    H < M1,
+    M = M1.
+
+/* Example:
+?- maxlist([2,9,5,1],M).
+*/
+
+
+/*-------------------------------------------------
+14. INSERT ELEMENT AT Nth POSITION
+-------------------------------------------------*/
+
+insert(I,1,L,[I|L]).
+
+insert(I,N,[H|T],[H|R]) :-
+    N > 1,
+    N1 is N - 1,
+    insert(I,N1,T,R).
+
+/* Example:
+?- insert(9,3,[1,2,3,4],R).
+*/
+
+
+/*-------------------------------------------------
+15. DELETE ELEMENT FROM Nth POSITION
+-------------------------------------------------*/
+
+delete(1,[_|T],T).
+
+delete(N,[H|T],[H|R]) :-
+    N > 1,
+    N1 is N - 1,
+    delete(N1,T,R).
+
+/* Example:
+?- delete(3,[1,2,3,4],R).
+*/
